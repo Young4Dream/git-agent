@@ -1,0 +1,13 @@
+syntax = "proto3";
+package com.y4d.git.cli;
+option java_package = "com.y4d.git.cli"; //生成类的包名，注意：会在指定路径下按照该包名的定义来生成文件夹
+option java_outer_classname = "GitCliProto";
+message GitCli {
+  string host = 1;
+  int32 port = 2;
+  string cmd = 3;
+  string path = 4;
+  string user_id = 5;
+  string user_ip = 6;
+  string username = 7;
+}
