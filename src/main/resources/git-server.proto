@@ -1,0 +1,7 @@
+syntax = "proto3";
+
+package com.y4d.git.server;
+option java_outer_classname = "GitServerProto";
+message GitServer {
+    string response = 100;
+}
