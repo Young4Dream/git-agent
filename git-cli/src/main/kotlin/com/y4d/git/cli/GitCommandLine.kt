@@ -1,15 +1,13 @@
 package com.y4d.git.cli
 
-import io.netty.channel.ChannelHandlerContext
-import io.netty.channel.ChannelInboundHandlerAdapter
 import picocli.CommandLine
-import picocli.CommandLine.Option
-import picocli.CommandLine.Parameters
+import picocli.CommandLine.*
 import java.util.concurrent.Callable
 
-class GitCli : ChannelInboundHandlerAdapter(), Callable<Int> {
+@Command(name = "rgc", aliases = ["remote git client"])
+class GitCommandLine : Callable<Int> {
     // 0..*表示包含了所有参数
-    @Parameters(index = "0..*")
+    @Parameters
     lateinit var path: String
 
     @Option(names = ["-c", "--cmd"], required = true)
@@ -21,28 +19,20 @@ class GitCli : ChannelInboundHandlerAdapter(), Callable<Int> {
     @Option(names = ["-p", "--port"], required = false)
     var port = 12306
 
-    lateinit var gitCliProto: GitCliProto
-
-    override fun channelActive(ctx: ChannelHandlerContext) {
-        ctx.writeAndFlush(gitCliProto)
-    }
-
     companion object {
         @JvmStatic
         fun main(args: Array<String>) {
-            val cli = GitCli()
+            val cli = GitCommandLine()
             // 注入参数
             val line = CommandLine(cli)
-            val exitCode = line.execute(*args)
-            println(exitCode)
+            line.execute(*args)
         }
     }
 
     override fun call(): Int {
-        val client = Client()
-        client.boot(this)
-
-        return 1;
+        val build = GitCliProto.GitCli.newBuilder().setCmd(cmd).setPath(path).setHost(host).setPort(port).build()
+        GitServer(build).boot()
+        // 默认执行成功
+        return 0;
     }
-
 }

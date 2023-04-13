@@ -29,6 +29,12 @@ public final class GitServerProto {
      */
     com.google.protobuf.ByteString
         getResponseBytes();
+
+    /**
+     * <code>bool success = 101;</code>
+     * @return The success.
+     */
+    boolean getSuccess();
   }
   /**
    * Protobuf type {@code com.y4d.git.server.GitServer}
@@ -105,6 +111,17 @@ public final class GitServerProto {
       }
     }
 
+    public static final int SUCCESS_FIELD_NUMBER = 101;
+    private boolean success_ = false;
+    /**
+     * <code>bool success = 101;</code>
+     * @return The success.
+     */
+    @java.lang.Override
+    public boolean getSuccess() {
+      return success_;
+    }
+
     private byte memoizedIsInitialized = -1;
     @java.lang.Override
     public final boolean isInitialized() {
@@ -122,6 +139,9 @@ public final class GitServerProto {
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(response_)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 100, response_);
       }
+      if (success_ != false) {
+        output.writeBool(101, success_);
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -133,6 +153,10 @@ public final class GitServerProto {
       size = 0;
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(response_)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(100, response_);
+      }
+      if (success_ != false) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(101, success_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
@@ -151,6 +175,8 @@ public final class GitServerProto {
 
       if (!getResponse()
           .equals(other.getResponse())) return false;
+      if (getSuccess()
+          != other.getSuccess()) return false;
       if (!getUnknownFields().equals(other.getUnknownFields())) return false;
       return true;
     }
@@ -164,6 +190,9 @@ public final class GitServerProto {
       hash = (19 * hash) + getDescriptor().hashCode();
       hash = (37 * hash) + RESPONSE_FIELD_NUMBER;
       hash = (53 * hash) + getResponse().hashCode();
+      hash = (37 * hash) + SUCCESS_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
+          getSuccess());
       hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -294,6 +323,7 @@ public final class GitServerProto {
         super.clear();
         bitField0_ = 0;
         response_ = "";
+        success_ = false;
         return this;
       }
 
@@ -330,6 +360,9 @@ public final class GitServerProto {
         if (((from_bitField0_ & 0x00000001) != 0)) {
           result.response_ = response_;
         }
+        if (((from_bitField0_ & 0x00000002) != 0)) {
+          result.success_ = success_;
+        }
       }
 
       @java.lang.Override
@@ -348,6 +381,9 @@ public final class GitServerProto {
           response_ = other.response_;
           bitField0_ |= 0x00000001;
           onChanged();
+        }
+        if (other.getSuccess() != false) {
+          setSuccess(other.getSuccess());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
@@ -380,6 +416,11 @@ public final class GitServerProto {
                 bitField0_ |= 0x00000001;
                 break;
               } // case 802
+              case 808: {
+                success_ = input.readBool();
+                bitField0_ |= 0x00000002;
+                break;
+              } // case 808
               default: {
                 if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                   done = true; // was an endgroup tag
@@ -468,6 +509,38 @@ public final class GitServerProto {
         onChanged();
         return this;
       }
+
+      private boolean success_ ;
+      /**
+       * <code>bool success = 101;</code>
+       * @return The success.
+       */
+      @java.lang.Override
+      public boolean getSuccess() {
+        return success_;
+      }
+      /**
+       * <code>bool success = 101;</code>
+       * @param value The success to set.
+       * @return This builder for chaining.
+       */
+      public Builder setSuccess(boolean value) {
+
+        success_ = value;
+        bitField0_ |= 0x00000002;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>bool success = 101;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearSuccess() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        success_ = false;
+        onChanged();
+        return this;
+      }
       @java.lang.Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
@@ -546,9 +619,9 @@ public final class GitServerProto {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\020git-server.proto\022\022com.y4d.git.server\"\035" +
-      "\n\tGitServer\022\020\n\010response\030d \001(\tB\020B\016GitServ" +
-      "erProtob\006proto3"
+      "\n\020git-server.proto\022\022com.y4d.git.server\"." +
+      "\n\tGitServer\022\020\n\010response\030d \001(\t\022\017\n\007success" +
+      "\030e \001(\010B\020B\016GitServerProtob\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -559,7 +632,7 @@ public final class GitServerProto {
     internal_static_com_y4d_git_server_GitServer_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_y4d_git_server_GitServer_descriptor,
-        new java.lang.String[] { "Response", });
+        new java.lang.String[] { "Response", "Success", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)
