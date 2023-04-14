@@ -19,12 +19,11 @@ class GitChannelHandler(private val workspace: String) : ChannelInboundHandlerAd
     }
 
 
-
-
     override fun channelRead(ctx: ChannelHandlerContext?, msg: Any?) {
         builder.clear()
         val gitCli = msg as GitCliProto.GitCli
-        val process = Runtime.getRuntime().exec("git " + gitCli.cmd, emptyArray<String>(), File(workspace + gitCli.path))
+        val process =
+            Runtime.getRuntime().exec("git " + gitCli.cmd, emptyArray<String>(), File(workspace + gitCli.path))
         val thread = Thread(GitReader(process.inputStream, builder))
         thread.start()
         val reader = BufferedReader(InputStreamReader(process.errorStream))
@@ -36,9 +35,6 @@ class GitChannelHandler(private val workspace: String) : ChannelInboundHandlerAd
         process.waitFor()
         val exitValue = process.exitValue()
         serverBuilder.setResponse(builder.toString()).setSuccess(exitValue == 0)
-    }
-
-    override fun channelActive(ctx: ChannelHandlerContext?) {
         ctx?.writeAndFlush(serverBuilder.build())
     }
 }

@@ -10,9 +10,8 @@ class GitServer(private val cli: GitCliProto.GitCli) {
         val group = NioEventLoopGroup()
         val bootstrap = Bootstrap()
         try {
-            val gitChannelHandler = GitChannelHandler(cli)
             bootstrap.group(group).channel(NioSocketChannel::class.java)
-                .handler(gitChannelHandler)
+                .handler(GitChannelInitializer(cli))
 //            发起异步连接操作
             val sync = bootstrap.connect(cli.host, cli.port).sync()
 //            等待客户端链路关闭
