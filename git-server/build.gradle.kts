@@ -23,6 +23,18 @@ kapt {
         arg("project", "${project.group}/${project.name}")
     }
 }
+kotlin {
+    jvmToolchain(8)
+}
+
+tasks {
+    compileKotlin {
+        kotlinOptions.jvmTarget = "1.8"
+    }
+    compileTestKotlin {
+        kotlinOptions.jvmTarget = "1.8"
+    }
+}
 
 application {
     val name = "com.y4d.git.server.GitCommandLine"
