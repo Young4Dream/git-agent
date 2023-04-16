@@ -2,6 +2,7 @@ package com.y4d.git.cli
 
 import picocli.CommandLine
 import picocli.CommandLine.*
+import java.net.InetAddress
 import java.util.concurrent.Callable
 
 @Command(name = "rgc", aliases = ["remote git client"])
@@ -30,7 +31,10 @@ class GitCommandLine : Callable<Int> {
     }
 
     override fun call(): Int {
-        val build = GitCliProto.GitCli.newBuilder().setCmd(cmd).setPath(path).setHost(host).setPort(port).build()
+        val build =
+            GitCliProto.GitCli.newBuilder().setUserId(System.getProperty("user.name"))
+                .setUserIp(InetAddress.getLocalHost().hostAddress).setCmd(cmd).setPath(path)
+                .setHost(host).setPort(port).build()
         GitServer(build).boot()
         // 默认执行成功
         return 0;

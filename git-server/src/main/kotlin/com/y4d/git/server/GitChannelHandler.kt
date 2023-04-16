@@ -27,8 +27,12 @@ class GitChannelHandler(private val workspace: String, private val gitHome: Stri
         val value = !gitCli.cmd.startsWith("git")
         // 仅仅支持git命令
         val cmd = if (value) "$gitHome/bin/git ${gitCli.cmd}" else "$gitHome/bin/${gitCli.cmd}"
+        val projectUri =
+            if (gitCli.path.startsWith("/") || gitCli.path.startsWith('\\')) gitCli.path else "/${gitCli.path}"
+        val workdir = File(workspace + projectUri)
+        println("request from ${gitCli.userId}@${gitCli.userIp}, cmd: $cmd, workdir: $workdir")
         val process =
-            Runtime.getRuntime().exec(cmd, emptyArray<String>(), File(workspace + gitCli.path))
+            Runtime.getRuntime().exec(cmd, emptyArray<String>(), workdir)
         val thread = Thread(GitReader(process.inputStream, builder))
         thread.start()
         val reader = BufferedReader(InputStreamReader(process.errorStream))
