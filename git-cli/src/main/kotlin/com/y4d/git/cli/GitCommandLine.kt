@@ -37,6 +37,6 @@ class GitCommandLine : Callable<Int> {
                 .setHost(host).setPort(port).build()
         GitServer(build).boot()
         // 默认执行成功
-        return 0;
+        return 0
     }
 }
