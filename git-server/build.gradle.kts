@@ -14,8 +14,6 @@ dependencies {
     testImplementation("junit:junit:4.12")
     implementation("com.google.protobuf:protobuf-kotlin:3.22.2")
     implementation("io.netty:netty-all:4.1.10.Final")
-    kapt("info.picocli:picocli-codegen:4.7.1")
-    implementation("info.picocli:picocli:4.7.1")
     implementation(project(mapOf("path" to ":")))
 }
 kapt {
