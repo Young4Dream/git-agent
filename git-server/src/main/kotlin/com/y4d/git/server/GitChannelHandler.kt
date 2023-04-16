@@ -22,8 +22,11 @@ class GitChannelHandler(private val workspace: String) : ChannelInboundHandlerAd
     override fun channelRead(ctx: ChannelHandlerContext?, msg: Any?) {
         builder.clear()
         val gitCli = msg as GitCliProto.GitCli
+        val value = !gitCli.cmd.startsWith("git")
+        // 仅仅支持git命令
+        val cmd = if (value) "git ${gitCli.cmd}" else gitCli.cmd
         val process =
-            Runtime.getRuntime().exec("git " + gitCli.cmd, emptyArray<String>(), File(workspace + gitCli.path))
+            Runtime.getRuntime().exec(cmd, emptyArray<String>(), File(workspace + gitCli.path))
         val thread = Thread(GitReader(process.inputStream, builder))
         thread.start()
         val reader = BufferedReader(InputStreamReader(process.errorStream))
