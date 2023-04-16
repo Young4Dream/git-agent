@@ -8,7 +8,7 @@ import java.io.File
 import java.io.InputStream
 import java.io.InputStreamReader
 
-class GitChannelHandler(private val workspace: String) : ChannelInboundHandlerAdapter() {
+class GitChannelHandler(private val workspace: String, private val gitHome: String) : ChannelInboundHandlerAdapter() {
     private val builder = StringBuilder()
     private val serverBuilder = GitServerProto.GitServer.newBuilder()
 
@@ -18,13 +18,15 @@ class GitChannelHandler(private val workspace: String) : ChannelInboundHandlerAd
         ctx?.close()
     }
 
+    override fun channelActive(ctx: ChannelHandlerContext?) {
+        builder.clear()
+    }
 
     override fun channelRead(ctx: ChannelHandlerContext?, msg: Any?) {
-        builder.clear()
         val gitCli = msg as GitCliProto.GitCli
         val value = !gitCli.cmd.startsWith("git")
         // 仅仅支持git命令
-        val cmd = if (value) "git ${gitCli.cmd}" else gitCli.cmd
+        val cmd = if (value) "$gitHome/bin/git ${gitCli.cmd}" else "$gitHome/bin/${gitCli.cmd}"
         val process =
             Runtime.getRuntime().exec(cmd, emptyArray<String>(), File(workspace + gitCli.path))
         val thread = Thread(GitReader(process.inputStream, builder))
