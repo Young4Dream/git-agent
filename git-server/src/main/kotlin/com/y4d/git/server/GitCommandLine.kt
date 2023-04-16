@@ -1,28 +1,34 @@
 package com.y4d.git.server
 
-import picocli.CommandLine
-import picocli.CommandLine.Command
-import picocli.CommandLine.Option
-import java.util.concurrent.Callable
+import java.nio.file.Paths
+import java.util.*
+import kotlin.io.path.exists
+import kotlin.io.path.inputStream
+import kotlin.system.exitProcess
 
-@Command(name = "rgs", aliases = ["git remote server"])
-class GitCommandLine : Callable<Int> {
-    @Option(names = ["-w", "--workdir"], required = true)
-    private lateinit var workdir: String
-
-    @Option(names = ["-p", "--port"], required = false)
-    private var port = 12306
-
+class GitCommandLine {
     companion object {
         @JvmStatic
         fun main(args: Array<String>) {
-            val commandLine = CommandLine(GitCommandLine())
-            commandLine.execute(*args)
+            val properties = Properties()
+            val path = Paths.get(".install4j/response.varfile")
+            val exists = path.exists()
+            if (!exists) {
+                System.err.println("cannot find varfile!")
+                exitProcess(1)
+            }
+            try {
+                val inputStream = path.inputStream()
+                properties.load(inputStream)
+                for (p in properties) {
+                    println("${p.key}:${p.value}")
+                }
+                val property = properties.getProperty("port")
+                val workdir = properties.getProperty("workdir")
+                GitServer(workdir).bind(property.toInt())
+            } catch (ex: Exception) {
+                ex.printStackTrace()
+            }
         }
-    }
-
-    override fun call(): Int {
-        GitServer(workdir).bind(port)
-        return 0
     }
 }
